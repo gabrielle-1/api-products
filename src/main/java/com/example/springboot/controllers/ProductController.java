@@ -2,7 +2,7 @@ package com.example.springboot.controllers;
 
 import com.example.springboot.dtos.ProductRecordDto;
 import com.example.springboot.models.ProductModel;
-import com.example.springboot.repositories.ProductRepository;
+import com.example.springboot.services.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +21,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class ProductController {
 
     @Autowired
-    ProductRepository productRepository;
+    ProductService productService;
 
     @PostMapping("/products")
     public ResponseEntity<ProductModel> saveProduct(@RequestBody @Valid ProductRecordDto productRecordDto) {
-        var productModel = new ProductModel();
-        BeanUtils.copyProperties(productRecordDto, productModel);
-        return ResponseEntity.status(HttpStatus.CREATED).body(productRepository.save(productModel));
+        var productSaved = this.productService.saveProduct(productRecordDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(productSaved);
     }
 
     /*
@@ -40,44 +39,34 @@ public class ProductController {
 
     @GetMapping("/products")
     public ResponseEntity<List<ProductModel>> getAllProducts() {
-        List<ProductModel> products = this.productRepository.findAll();
-        if (!products.isEmpty()) {
-            for (ProductModel product : products) {
-                UUID id = product.getIdProduct();
-                product.add(linkTo(methodOn(ProductController.class).getOneProduct(id)).withSelfRel());
-            }
-        }
+        var products = this.productService.getAllProducts();
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 
     @GetMapping("/products/{id}")
     public ResponseEntity<Object> getOneProduct(@PathVariable(value = "id")UUID id) {
-        Optional<ProductModel> product = this.productRepository.findById(id);
-        if (product.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found.");
-        product.get().add(linkTo(methodOn(ProductController.class).getAllProducts()).withSelfRel());
-        return ResponseEntity.status(HttpStatus.OK).body(product.get());
+        Object product = this.productService.getOneProduct(id);
+        if (product == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found.");
+        return ResponseEntity.status(HttpStatus.OK).body(product);
     }
 
     @PutMapping("/products/{id}")
     public ResponseEntity<Object> updateProduct(@PathVariable(value = "id") UUID id,
                                                 @RequestBody @Valid ProductRecordDto productRecordDto) {
 
-        Optional<ProductModel> product = this.productRepository.findById(id);
-        if (product.isEmpty()) {
+        var product = this.productService.updateProduct(id, productRecordDto);
+        if (product == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
         }
-        var productModel = product.get();
-        BeanUtils.copyProperties(productRecordDto, productModel);
-        return ResponseEntity.status(HttpStatus.OK).body(this.productRepository.save(productModel));
+        return ResponseEntity.status(HttpStatus.OK).body(product);
     }
 
     @DeleteMapping("/products/{id}")
     public ResponseEntity<Object> deleteProduct(@PathVariable(value = "id") UUID id) {
-        Optional<ProductModel> product = this.productRepository.findById(id);
-        if (product.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
+        var product = this.productService.deleteProduct(id);
+        if (!product) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The product could not be deleted.");
         }
-        this.productRepository.delete(product.get());
         return ResponseEntity.status(HttpStatus.OK).body("Product deleted successfully");
     }
 }
