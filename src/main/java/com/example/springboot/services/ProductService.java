@@ -39,6 +39,12 @@ public class ProductService {
         return products;
     }
 
+    /*  Without use Hateoas
+        public List<ProductModel> getAllProducts() {
+            return this.productRepository.findAll();
+        }
+    */
+
     public Object getOneProduct(UUID id) {
         Optional<ProductModel> product = this.productRepository.findById(id);
         if (product.isEmpty()) return null;

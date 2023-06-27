@@ -4,6 +4,8 @@ import com.example.springboot.dtos.ProductRecordDto;
 import com.example.springboot.models.ProductModel;
 import com.example.springboot.services.ProductService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,14 +41,14 @@ public class ProductController {
     }
 
     @GetMapping("/products/{id}")
-    public ResponseEntity<Object> getOneProduct(@PathVariable(value = "id")UUID id) {
+    public ResponseEntity<Object> getOneProduct(@PathVariable(value = "id") @NotNull @Positive UUID id) {
         Object product = this.productService.getOneProduct(id);
         if (product == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found.");
         return ResponseEntity.status(HttpStatus.OK).body(product);
     }
 
     @PutMapping("/products/{id}")
-    public ResponseEntity<Object> updateProduct(@PathVariable(value = "id") UUID id,
+    public ResponseEntity<Object> updateProduct(@PathVariable(value = "id") @NotNull @Positive UUID id,
                                                 @RequestBody @Valid ProductRecordDto productRecordDto) {
 
         var product = this.productService.updateProduct(id, productRecordDto);
@@ -57,7 +59,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/products/{id}")
-    public ResponseEntity<Object> deleteProduct(@PathVariable(value = "id") UUID id) {
+    public ResponseEntity<Object> deleteProduct(@PathVariable(value = "id") @NotNull @Positive UUID id) {
         var product = this.productService.deleteProduct(id);
         if (!product) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The product could not be deleted.");
