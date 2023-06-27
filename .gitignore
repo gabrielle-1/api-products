@@ -1,10 +1,10 @@
-HELP.md
+# Arquivos de compilacao
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-### STS ###
+# Arquivos gerados pelo Spring Tools Suite (STS)
 .apt_generated
 .classpath
 .factorypath
@@ -13,13 +13,13 @@ target/
 .springBeans
 .sts4-cache
 
-### IntelliJ IDEA ###
+# Arquivos gerados pelo IntelliJ IDEA
 .idea
 *.iws
 *.iml
 *.ipr
 
-### NetBeans ###
+# Arquivos gerados pelo NetBeans
 /nbproject/private/
 /nbbuild/
 /dist/
@@ -29,5 +29,23 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### VS Code ###
+# Arquivos gerados pelo Visual Studio Code
 .vscode/
+
+# Arquivos de log
+logs/
+*.log
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos de configuracao do Maven
+mvnw
+mvnw.cmd
+.mvn/
+target/
+
+# Arquivos de configuracao especificos do Spring Boot
+application*.yml
+application*.properties
