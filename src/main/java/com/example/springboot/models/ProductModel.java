@@ -8,6 +8,7 @@ import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -27,6 +28,14 @@ public class ProductModel extends RepresentationModel<ProductModel> implements S
 
     @NotNull
     private BigDecimal value;
+
+    @NotNull
+    @NotBlank
+    LocalDateTime createdAt;
+
+    @NotNull
+    @NotBlank
+    LocalDateTime updatedAt;
 
     public UUID getIdProduct() {
         return idProduct;
@@ -50,5 +59,21 @@ public class ProductModel extends RepresentationModel<ProductModel> implements S
 
     public void setValue(BigDecimal value) {
         this.value = value;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
