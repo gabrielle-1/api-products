@@ -1,4 +1,4 @@
-package com.example.springboot.models;
+package com.example.springboot.domain.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
