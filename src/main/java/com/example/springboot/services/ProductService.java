@@ -26,11 +26,14 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public ProductModel saveProduct(ProductRecordDto productRecordDto) {
+    public ProductRecordDto saveProduct(ProductRecordDto productRecordDto) {
         var productModel = new ProductModel();
         BeanUtils.copyProperties(productRecordDto, productModel);
-        var productSaved = productRepository.save(productModel);
-        return productSaved;
+        var productSavedModel = productRepository.save(productModel);
+
+        BeanUtils.copyProperties(productSavedModel, productRecordDto);
+
+        return productRecordDto;
     }
 
     public List<ProductModel> getAllProducts() {

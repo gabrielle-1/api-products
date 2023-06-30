@@ -10,4 +10,5 @@ public record ProductRecordDto(
         @NotBlank String name, @NotNull BigDecimal value, @NotNull LocalDateTime createdAt, @NotNull LocalDateTime updatedAt
 ) {
 
+
 }
