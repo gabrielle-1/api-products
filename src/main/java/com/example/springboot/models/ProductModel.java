@@ -1,4 +1,4 @@
-package com.example.springboot.domain.models;
+package com.example.springboot.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -30,11 +30,9 @@ public class ProductModel extends RepresentationModel<ProductModel> implements S
     private BigDecimal value;
 
     @NotNull
-    @NotBlank
     LocalDateTime createdAt;
 
     @NotNull
-    @NotBlank
     LocalDateTime updatedAt;
 
     public UUID getIdProduct() {

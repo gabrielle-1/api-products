@@ -1,4 +1,4 @@
-package com.example.springboot.domain.dtos;
+package com.example.springboot.dtos;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

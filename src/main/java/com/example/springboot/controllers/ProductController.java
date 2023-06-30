@@ -1,18 +1,16 @@
-package com.example.springboot.domain.controllers;
+package com.example.springboot.controllers;
 
-import com.example.springboot.domain.dtos.ProductRecordDto;
-import com.example.springboot.domain.models.ProductModel;
-import com.example.springboot.domain.services.ProductService;
+import com.example.springboot.dtos.ProductRecordDto;
+import com.example.springboot.models.ProductModel;
+import com.example.springboot.services.ProductService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -25,22 +23,14 @@ public class ProductController {
     }
 
     @PostMapping("/products")
-    public ResponseEntity<Mono<ProductModel>> saveProduct(@RequestBody @Valid ProductRecordDto productRecordDto) {
+    public ResponseEntity<ProductModel> saveProduct(@RequestBody @Valid ProductRecordDto productRecordDto) {
         var productSaved = this.productService.saveProduct(productRecordDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(productSaved);
     }
 
-    /*
-    // Without Hateoas
     @GetMapping("/products")
     public ResponseEntity<List<ProductModel>> getAllProducts() {
-        return ResponseEntity.status(HttpStatus.OK).body(this.productRepository.findAll());
-    }
-
-
-    @GetMapping("/products")
-    public ResponseEntity<Flux<ProductModel>> getAllProducts() {
-        Flux<ProductModel> products = this.productService.getAllProducts();
+        List<ProductModel> products = this.productService.getAllProducts();
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 
@@ -70,5 +60,4 @@ public class ProductController {
         }
         return ResponseEntity.status(HttpStatus.OK).body("Product deleted successfully");
     }
-     */
 }
