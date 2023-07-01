@@ -6,6 +6,8 @@ import com.example.springboot.models.ProductModel;
 import com.example.springboot.repositories.ProductRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -36,13 +38,13 @@ public class ProductService {
         return productRecordDto;
     }
 
-    public List<ProductModel> getAllProducts() {
-        var products = this.productRepository.findAll();
+    public Page<ProductModel> getAllProducts(Pageable pageable) {
+        var products = this.productRepository.findAll(pageable);
 
         if (!products.isEmpty()) {
             for (ProductModel product : products) {
                 UUID id = product.getIdProduct();
-                product.add(linkTo(methodOn(ProductController.class).getOneProduct(id)).withSelfRel());
+                product.add(linkTo(methodOn(ProductController.class).getOneProduct(id, pageable)).withSelfRel());
             }
         }
 
@@ -55,10 +57,10 @@ public class ProductService {
         }
     */
 
-    public ProductModel getOneProduct(UUID id) {
+    public ProductModel getOneProduct(UUID id, Pageable pageable) {
         var product = this.productRepository.findById(id);
         if (product.isEmpty()) return null;
-        product.get().add(linkTo(methodOn(ProductController.class).getAllProducts()).withSelfRel());
+        product.get().add(linkTo(methodOn(ProductController.class).getAllProducts(pageable)).withSelfRel());
         return product.get();
     }
 

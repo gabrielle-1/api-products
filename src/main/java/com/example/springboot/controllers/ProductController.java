@@ -6,6 +6,7 @@ import com.example.springboot.services.ProductService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,14 +30,14 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public ResponseEntity<List<ProductModel>> getAllProducts() {
-        List<ProductModel> products = this.productService.getAllProducts();
+    public ResponseEntity<List<ProductModel>> getAllProducts(Pageable pageable) {
+        List<ProductModel> products = this.productService.getAllProducts(pageable).getContent();
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 
     @GetMapping("/products/{id}")
-    public ResponseEntity<Object> getOneProduct(@PathVariable(value = "id") @NotNull @Positive UUID id) {
-        Object product = this.productService.getOneProduct(id);
+    public ResponseEntity<Object> getOneProduct(@PathVariable(value = "id") @NotNull @Positive UUID id, @NotNull @Positive Pageable pageable) {
+        Object product = this.productService.getOneProduct(id, pageable);
         if (product == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found.");
         return ResponseEntity.status(HttpStatus.OK).body(product);
     }
