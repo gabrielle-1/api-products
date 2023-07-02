@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
-import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -40,15 +37,15 @@ public class ProductService {
 
     public Page<ProductModel> getAllProducts(Pageable pageable) {
         var products = this.productRepository.findAll(pageable);
-
-        if (!products.isEmpty()) {
+        if (products != null && !products.isEmpty()) {
             for (ProductModel product : products) {
                 UUID id = product.getIdProduct();
                 product.add(linkTo(methodOn(ProductController.class).getOneProduct(id, pageable)).withSelfRel());
             }
+            return products;
+        } else {
+            return Page.empty();
         }
-
-        return products;
     }
 
     /*  Without use Hateoas

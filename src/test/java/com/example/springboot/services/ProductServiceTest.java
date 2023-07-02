@@ -3,13 +3,15 @@ package com.example.springboot.services;
 import com.example.springboot.dtos.ProductRecordDto;
 import com.example.springboot.models.ProductModel;
 import com.example.springboot.repositories.ProductRepository;
-import com.example.springboot.services.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -62,5 +64,13 @@ public class ProductServiceTest {
         assertEquals(updatedAt, productModel.getUpdatedAt());
 
         verify(productRepository, times(1)).save(any(ProductModel.class));
+    }
+
+    @Test
+    void testListProductsPaginated(){
+        Pageable pageable = PageRequest.of(2, 2);
+        System.out.println(this.productService.getAllProducts(pageable).getTotalElements());
+        Page<ProductModel> pageProducts = this.productService.getAllProducts(pageable);
+        assertEquals(2, pageProducts.getContent().size());
     }
 }
