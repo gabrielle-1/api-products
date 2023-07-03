@@ -78,8 +78,7 @@ For detailed information about the available endpoints and request/response form
 
 ### API Documentation
 Its in progress.
-<!-- The API documentation is automatically generated using Swagger. Once the application is running, you can access the Swagger UI by visiting http://localhost:8080/swagger-ui.html in your browser. It provides an interactive interface to explore and test the API endpoints.
--->
+The API documentation is automatically generated using Swagger. Once the application is running, you can access the Swagger UI by visiting http://localhost:8080/swagger-ui/index.html#/ in your browser. It provides an interactive interface to explore and test the API endpoints.
 
 ### Contributing
 Contributions to this project are welcome. To contribute, please follow these steps:
