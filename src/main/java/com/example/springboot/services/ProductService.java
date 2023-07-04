@@ -4,6 +4,7 @@ import com.example.springboot.controllers.ProductController;
 import com.example.springboot.dtos.ProductRecordDto;
 import com.example.springboot.models.ProductModel;
 import com.example.springboot.repositories.ProductRepository;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,7 +36,7 @@ public class ProductService {
         return productRecordDto;
     }
 
-    public Page<ProductModel> getAllProducts(Pageable pageable) {
+    public Page<ProductModel> getAllProducts(@Parameter Pageable pageable) {
         var products = this.productRepository.findAll(pageable);
         if (products != null && !products.isEmpty()) {
             for (ProductModel product : products) {

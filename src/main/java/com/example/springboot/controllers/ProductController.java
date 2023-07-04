@@ -3,6 +3,11 @@ package com.example.springboot.controllers;
 import com.example.springboot.dtos.ProductRecordDto;
 import com.example.springboot.models.ProductModel;
 import com.example.springboot.services.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -29,6 +34,13 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(productSaved);
     }
 
+    @Operation(summary = "Obter usuário por ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuário encontrado",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ProductModel.class))),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+    })
     @GetMapping("/products")
     public ResponseEntity<List<ProductModel>> getAllProducts(Pageable pageable) {
         List<ProductModel> products = this.productService.getAllProducts(pageable).getContent();
