@@ -2,6 +2,7 @@ package com.example.springboot.services;
 
 import com.example.springboot.controllers.ProductController;
 import com.example.springboot.dtos.ProductRecordDto;
+import com.example.springboot.exceptions.NullParameterException;
 import com.example.springboot.models.ProductModel;
 import com.example.springboot.repositories.ProductRepository;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -27,6 +28,9 @@ public class ProductService {
     }
 
     public ProductRecordDto saveProduct(ProductRecordDto productRecordDto) {
+        if (productRecordDto == null)
+            throw new NullParameterException("The parameter product cannot be null.");
+
         var productModel = new ProductModel();
         BeanUtils.copyProperties(productRecordDto, productModel);
         var productSavedModel = productRepository.save(productModel);
