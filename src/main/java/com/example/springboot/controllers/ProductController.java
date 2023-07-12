@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Tag(name = "Product API", description = "API for product management")
 @RestController
 public class ProductController {
@@ -39,6 +41,7 @@ public class ProductController {
     })
     @PostMapping("/products")
     public ResponseEntity<ProductRecordDto> saveProduct(@RequestBody @Valid ProductRecordDto productRecordDto) {
+        log.info("Calling endpoint to save a product in controller: " + log.getName());
         var productSaved = this.productService.saveProduct(productRecordDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(productSaved);
     }
@@ -51,6 +54,7 @@ public class ProductController {
     })
     @GetMapping("/products")
     public ResponseEntity<List<ProductModel>> getAllProducts(@Parameter(hidden = true) Pageable pageable) {
+        log.info("Calling endpoint to list all products in controller: " + log.getName());
         List<ProductModel> products = this.productService.getAllProducts(pageable).getContent();
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }
@@ -64,6 +68,7 @@ public class ProductController {
     })
     @GetMapping("/products/{id}")
     public ResponseEntity<Object> getOneProduct(@PathVariable(value = "id") @NotNull @Positive UUID id, @Parameter(hidden = true) @NotNull @Positive Pageable pageable) {
+        log.info("Calling endpoint to get one product in controller: " + log.getName());
         Object product = this.productService.getOneProduct(id, pageable);
         if (product == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found.");
         return ResponseEntity.status(HttpStatus.OK).body(product);
@@ -79,7 +84,7 @@ public class ProductController {
     @PutMapping("/products/{id}")
     public ResponseEntity<Object> updateProduct(@PathVariable(value = "id") @NotNull @Positive UUID id,
                                                 @RequestBody @Valid ProductRecordDto productRecordDto) {
-
+        log.info("Calling endpoint to update one product in controller: " + log.getName());
         var product = this.productService.updateProduct(id, productRecordDto);
         if (product == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
@@ -94,6 +99,7 @@ public class ProductController {
     })
     @DeleteMapping("/products/{id}")
     public ResponseEntity<Object> deleteProduct(@PathVariable(value = "id") @NotNull @Positive UUID id) {
+        log.info("Calling endpoint to delete one product in controller: " + log.getName());
         var product = this.productService.deleteProduct(id);
         if (!product) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The product could not be deleted.");

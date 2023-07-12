@@ -2,10 +2,10 @@ package com.example.springboot.services;
 
 import com.example.springboot.controllers.ProductController;
 import com.example.springboot.dtos.ProductRecordDto;
-import com.example.springboot.exceptions.NullParameterException;
 import com.example.springboot.models.ProductModel;
 import com.example.springboot.repositories.ProductRepository;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.constraints.Null;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,7 +29,7 @@ public class ProductService {
 
     public ProductRecordDto saveProduct(ProductRecordDto productRecordDto) {
         if (productRecordDto == null)
-            throw new NullParameterException("The parameter product cannot be null.");
+            throw new NullPointerException();
 
         var productModel = new ProductModel();
         BeanUtils.copyProperties(productRecordDto, productModel);
@@ -49,7 +49,8 @@ public class ProductService {
             }
             return products;
         } else {
-            return Page.empty();
+            throw new NullPointerException();
+            // return Page.empty();
         }
     }
 
